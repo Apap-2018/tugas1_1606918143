@@ -103,19 +103,13 @@ public class PegawaiController {
 	
 	@RequestMapping(value = "/pegawai/tambah", method = RequestMethod.POST, params = {"save"})
 	private String addPegawai(@ModelAttribute PegawaiModel pegawai, @RequestParam(value = "idProvinsi") long idProvinsi, Model model) {
-		System.out.println(pegawai.getNama());
-		System.out.println(pegawai.getInstansi());
 		// Set instansi from instansi Id
 		InstansiModel instansiTemp = instansiService.getInstansiDetailById(pegawai.getInstansi().getId());
 		pegawai.setInstansi(instansiTemp);
-		
-		System.out.println(pegawai.getInstansi().getNama());
 	  
 		// Set NIP by generating
 		String nipTemp = pegawaiService.generateNip(pegawai);
 		pegawai.setNip(nipTemp);
-		
-		System.out.println(pegawai.getNip());
 	  
 		List<JabatanModel> listJabatanTemp = pegawai.getJabatanList();
 		JabatanModel jabatanTemp;
@@ -149,7 +143,7 @@ public class PegawaiController {
 		List<PegawaiModel> listPegawai = pegawaiService.getListPegawai();
 		
 		if ((idProvinsi==null || idProvinsi.equals("")) && (idInstansi==null||idInstansi.equals("")) && (idJabatan==null||idJabatan.equals(""))) {
-			return "searchPegawai";
+			return "view-pegawai";
 		}
 		else {
 			if (idProvinsi!=null && !idProvinsi.equals("")) {
