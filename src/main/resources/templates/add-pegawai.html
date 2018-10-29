@@ -1,0 +1,122 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:replace = "fragments/fragment :: headerFragment('Tambah Pegawai')"></title>
+	<object th:include = "fragments/fragment :: css" th:remove = "tag"></object>
+	<object th:include = "fragments/fragment :: js" th:remove = "tag"></object>
+</head>
+
+<body>
+	<nav th:replace="fragments/fragment :: navbar"></nav>
+
+	<div class="container-fluid">
+		<div class="header">
+			<div class="row">
+				<div class="col-sm-12">
+					<h1>Tambah Pegawai</h1>
+				</div>
+			</div>
+		</div>
+	<hr>
+	<br>
+	<div id="add-pegawai">
+  	<form th:action="@{/pegawai/tambah}" th:object="${pegawai}" method="POST">
+  		<div class = "row">
+  			<div class="col-sm-3"><p>Nama</p></div>
+  			<div class="col-sm-9">
+				<input type="text" class="form-control" name="nama" th:value="*{nama}">
+			</div>
+  		</div>
+  		<br>
+  		<div class = "row">
+  			<div class="col-sm-3"><p>Tempat Lahir</p></div>
+  			<div class="col-sm-9">
+				<input type="text" class="form-control" name="tempatLahir" th:value="*{tempatLahir}">
+			</div>
+  		</div>
+  		<br>
+  		  	<div class = "row">
+  			<div class="col-sm-3"><p>Tanggal Lahir</p></div>
+  			<div class="col-sm-9">
+  				<input type="date" class="form-control" name="tanggalLahir" th:value="*{tanggalLahir}">
+  			</div>
+  		</div>
+  		<br>
+  		<div class = "row">
+  			<div class="col-sm-3"><p>Tahun Masuk</p></div>
+  			<div class="col-sm-9">
+  				<input type="number" class="form-control" name="tahunMasuk" th:value="*{tahunMasuk}">
+  			</div>
+  		</div>
+  		<br>
+  		<div class = "row">
+  			<div class="col-sm-3"><p>Provinsi</p></div>
+  			<div class="col-sm-9">
+  				<select class="form-control" id="provinsi" name="idProvinsi">
+  				<option value="">Pilih Provinsi</option>
+				<option th:each="provinsi: ${listProvinsi}" th:value="${provinsi.id}" th:text="${provinsi.nama}">provinsi</option>
+				</select>
+  			</div>
+  		</div>
+  		<br>
+  		<div class = "row">
+  			<div class="col-sm-3"><p>Nama Instansi</p></div>
+  			<div class="col-sm-9">
+  				<select class="form-control" id="instansi" name="instansi">
+				<option th:each="instansi: ${listInstansi}" th:value="${instansi.id}" th:text="${instansi.nama}">pilih instansi</option>
+				</select>
+  			</div>
+  		</div>
+  		<br>
+  		<div class = "row">
+  			<div class="col-sm-3"><p>Jabatan</p></div>
+  			<div class="col-sm-9">
+  			<div class="table-wrapper-scroll-y">
+    <table class="table table-hover table-sm">
+     <tr>
+      <th style="text-align:center"> Jabatan </th>
+      <th style="text-align:center"> Pilih </th>
+     </tr>
+     <tr th:each="jabatan: ${listJabatan}">
+      <td th:text="${jabatan.nama}"></td>
+      <td>
+       <input type="checkbox" th:field="*{jabatanList}" th:value="${jabatan.id}"/> 
+       <label th:for="${#ids.prev('jabatanList')}"></label>
+      </td>
+     </tr>
+    </table>
+   </div>
+<!--   				<select class="form-control" id="listJabatan" name="id"> -->
+<!-- 				<option th:each="jabatan: ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}">pilihan jabatan</option> -->
+<!-- 				</select> -->
+<!-- 				<input type="checkbox" th:field="*{jabatanList}" th:value="${jabatan.id}"/> -->
+  			</div>
+  		</div>
+  		<br>
+  		<button name = "save" type="submit" class="btn btn-dark">Simpan</button>
+  	</form>
+  </div>
+</div>
+
+	<script>
+	$('#provinsi').change(
+	        function() {
+	            $.getJSON("http://localhost:8080/provinsi/instansi", {
+	                idProvinsi : $(this).val(),
+	                ajax : 'true'
+	            }, function(data) {
+	                var html = '<option value="">Pilih Instansi</option>';
+	                var len = data.length;
+	                for ( var i = 0; i < len; i++) {
+	                    html += '<option value="' + data[i].id + '">'
+	                            + data[i].nama + '</option>';
+	                }
+	                html += '</option>';
+	                $('#instansi').html(html);
+	            });
+	        });
+	</script>
+	
+</body>
+</html>
